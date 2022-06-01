@@ -33,6 +33,8 @@ display_board($board)
 def check_winner
   winner = false
 
+  return puts 'The game is a tie!' if $board.none?(1..10) && winner == false
+
   win_combo = [
     [0, 1, 2],
     [3, 4, 5],
@@ -44,24 +46,36 @@ def check_winner
     [2, 4, 6]
   ]
   x = 0
+  y = 0
   win_combo.map do |wcn|
     wcn.each do |b|
       if $board[b] == $player1.symbol
         x += 1
+      elsif $board[b] == $player2.symbol
+        y += 1
       else
         next
       end
     end
     if x == 3
       puts 'player 1 win'
+      winner = true
+      return winner
+    elsif y == 3
+      puts 'player 2 win'
+      winner = true
+      return winner
     else
       x = 0
+      y = 0
     end
   end
 end
 
 def play_round
   # Prompt the user for a selection
+  # return 'Play again? [y/n]' if check_winner == true
+
   print 'Please make a selection with the available number: '
   player_selection = gets
 
