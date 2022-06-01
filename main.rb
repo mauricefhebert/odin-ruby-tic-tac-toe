@@ -10,37 +10,42 @@ class Player
     @score = score
   end
 end
-player1 = Player.new('Player 1', 'X', 0)
-player2 = Player.new('Player 2', 'O', 0)
-current_user = player1
 
-class Board
-  def initialize; end
+module PlayerModule
+  player1 = Player.new('Player 1', 'X')
+  player2 = Player.new('Player 2', 'O')
+  current_user = player1
 
-  def CreateBoard
-    puts '  |' + ' |'
+  def change_player()
+    current_user == player2 ? current_user = player1 : current_user = player2
   end
 end
 
-#
-#   1. At run time create the player
-#     1.1. Create a user class
-#     1.2. Create two user
-#     1.3 Assign current user variable as player one
-#
-#   2. Display the game board with some code in the middle as a reference for the user to select it's move
-#     2.1. Create a class for the Game Board and create an instance at run time filled with the default value
-#
-#   3. Ask the user to select it's move if the case if available allow it, otherwise ask again with an error message
-#     3.1. Ask the user for it's selection
-#     3.2. Loop trought the board and check if the value is available if it is replace it with the current user symbol
-#     3.3. Else Ask for another selection
-#
-#   4. When the user move is valide change the current player then redisplay the board with the new ui and check for a winner
-#     4.1.
-#
-#   5. Ask the player two to do it's move
-#
-#
-#   6. Repeat step 1 trought 5 until either one of the two player win, or the full board is full
-#
+
+
+# Board creation and display
+board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+def display_board(board)
+  puts " #{board[0]} | #{board[1]} | #{board[2]}"
+  puts '---------'
+  puts " #{board[3]} | #{board[4]} | #{board[5]}"
+  puts '---------'
+  puts " #{board[6]} | #{board[7]} | #{board[8]}"
+end
+display_board(board)
+
+def play_round()
+  include PlayerModule
+  print 'Please make a selection with the available number: '
+  player_selection = gets
+  display_board(board)
+  change_player()
+  board.each do |square|
+    if square != 'X' || square != 'O'
+      board[player_selection - 1] = current_user.symbol
+      display_board(board)
+    end
+  end
+end
+
+play_round()
