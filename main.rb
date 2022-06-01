@@ -39,10 +39,11 @@ end
 board_array = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 board = Board.new(board_array)
 board.display_board
+puts "\n"
+winner = false
 
 # 3. Check Winner function
 define_method('check_winner') do
-  winner = false
   win_combination = [
     [0, 1, 2],
     [3, 4, 5],
@@ -71,28 +72,35 @@ define_method('check_winner') do
     x = 0
     y = 0
   end
-  puts "It's a tie!" if winner == false && board.board.all? { |x| !x.is_a?(Integer) }
-  puts "#{current_player.name} win!" if winner == true
+  if winner == false && board.board.all? { |x| !x.is_a?(Integer) }
+    puts "It's a tie!"
+    abort
+  end
+  if winner == true
+    puts "#{current_player.name} win!"
+    abort
+  end
 end
 
 # 4. Game function
 define_method('play') do
   # Prompt the user for a selection
-  print 'Please make a selection with the available number: '
+  print "#{current_player.name} please make a selection: "
   selection = gets.chomp
 
   # Make sure the player selection is a valide one between 1 and 9
   while selection.to_i < 1 || selection.to_i > 9
-    print 'Please make a selection with the available number: '
+    print "#{current_player.name} please make a selection: "
     selection = gets.chomp
   end
 
   # If user selection on the board is already filled return
   unless board.board[selection.to_i - 1] == player_1.mark || board.board[selection.to_i - 1] == player_2.mark
     board.board[selection.to_i - 1] = current_player.mark
+    board.display_board
+    puts "\n"
     check_winner
     current_player == player_1 ? (current_player = player_2) : (current_player = player_1)
-    board.display_board
   end
   play
 end
